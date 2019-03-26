@@ -1,0 +1,13 @@
+version: "2"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    command: ["./init.sh"]
+    environment:
+      - NODE_ENV=dev # Possible values are stg, prod, dev
+    volumes:
+      - ./src:/opt/app/src
+    ports:
+      - 4000:4000

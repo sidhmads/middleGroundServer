@@ -1,0 +1,18 @@
+FROM node:10
+USER root
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+COPY . /opt/app
+
+RUN rm -rf /opt/app/node_modules
+RUN cd /opt/app && npm install
+RUN npm install -g typescript
+#COPY package.json /tmp/package.json
+
+#RUN cd /tmp && npm install
+#RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
+
+
+EXPOSE 4000
+CMD /init.sh
