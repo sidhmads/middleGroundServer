@@ -1,23 +1,22 @@
 import { GraphQLString, GraphQLInt, GraphQLBoolean, GraphQLInputObjectType, GraphQLFloat } from 'graphql';
 
-const SetIndividualType = new GraphQLInputObjectType({
-  name: 'SetIndividual',
+const SetCompanyType = new GraphQLInputObjectType({
+  name: 'SetCompany',
   fields:
   {
-    first_name: { type: GraphQLString },
-    last_name: { type: GraphQLString },
+    name: { type: GraphQLString },
     email: { type: GraphQLString },
     password: { type: GraphQLString },
     description: { type: GraphQLString },
     img: { type: GraphQLString },
     total_amount: { type: GraphQLFloat },
-    remaining_amount: { type: GraphQLFloat },
+    current_amount: { type: GraphQLFloat },
     is_active: { type: GraphQLBoolean },
   },
 });
 
-const WhereIndividualType = new GraphQLInputObjectType({
-  name: 'WhereIndividual',
+const WhereCompanyType = new GraphQLInputObjectType({
+  name: 'WhereCompany',
   fields:
   {
     id: { type: GraphQLInt },
@@ -29,6 +28,6 @@ const WhereIndividualType = new GraphQLInputObjectType({
 });
 
 export {
-  SetIndividualType,
-  WhereIndividualType,
+  SetCompanyType,
+  WhereCompanyType,
 };

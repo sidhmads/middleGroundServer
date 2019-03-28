@@ -3,9 +3,10 @@ import crypto from 'crypto';
 const algorithm = 'pbkdf2_sha256';
 const len = 32;
 
-function encode(password: string, iterations: number= 1, salt: string= ''): string {
+function encode(
+  password: string, iterations: number= 10, salt: string= crypto.randomBytes(16).toString('base64')): string {
   const key = crypto.pbkdf2Sync(password, salt, iterations, len, 'sha256');
-  const hashedPassword = algorithm + '$' + iterations + '$' + salt + '$' + key.toString('base64');
+  const hashedPassword = `${algorithm}$${iterations}$${salt}$${key.toString('base64')}`;
   return hashedPassword;
 }
 

@@ -1,12 +1,9 @@
 import {
-  GraphQLObjectType,
   GraphQLString,
   GraphQLFieldConfig,
-  GraphQLList,
-  GraphQLInt,
 } from 'graphql';
 import { IndividualService } from '../IndividualService';
-import { IndividualType } from './'
+import { IndividualType } from './';
 import { TokenService } from '../../../infrastructure/auth';
 
 const individualQuery: GraphQLFieldConfig<any, any> = {
@@ -18,8 +15,7 @@ const individualQuery: GraphQLFieldConfig<any, any> = {
 
 function createIndividualQueryResolver(individualService: IndividualService, tokenService: TokenService) {
   return async (source, args) => {
-    // const email = await tokenService.readTokenEmail(args.token);
-    const email = 'siddharth@gmail.com';
+    const email = await tokenService.readTokenEmail(args.token, 'individuals');
     return email ? await individualService.getIndividual(email) : null;
   };
 }

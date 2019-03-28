@@ -2,8 +2,22 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLFieldConfig,
+  GraphQLEnumType,
 } from 'graphql';
 import { TokenService } from './TokenService';
+
+const userType = new GraphQLEnumType({name: 'userType',
+  values: {
+    individual: {
+      value: 'individuals',
+    },
+    company: {
+      value: 'companies',
+    },
+    charity: {
+      value: 'charities',
+    },
+  } });
 
 const TokenType = new GraphQLObjectType({
   name: 'Token',
@@ -16,14 +30,15 @@ const TokenType = new GraphQLObjectType({
 const createToken: GraphQLFieldConfig<any, any> = {
   type: TokenType,
   args: {
-    username: { type: GraphQLString },
+    email: { type: GraphQLString },
     password: { type: GraphQLString },
+    type: { type: userType },
   },
 };
 
 function createTokenResolver(tokenService: TokenService) {
   return async (source, args) => {
-    const token = await tokenService.createToken(args.username, args.password);
+    const token = await tokenService.createToken(args.email, args.password, args.type);
     return {
       token,
       error: token === null ? 'Could not create token' : null,

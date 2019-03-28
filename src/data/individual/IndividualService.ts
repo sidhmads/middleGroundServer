@@ -29,7 +29,7 @@ export class IndividualService {
       .field('individuals.img', 'img')
       .field('individuals.total_amount', 'total_amount')
       .field('individuals.remaining_amount', 'remaining_amount')
-      .field('individuals.is_active', 'isActive')
+      .field('individuals.is_active', 'is_active')
       .where('individuals.email=?', email)
       .limit(1);
     const result = await this.db.query(sql.toString());

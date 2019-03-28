@@ -1,20 +1,20 @@
 import { TokenService } from '../../../infrastructure/auth/';
-import { IndividualService } from '../IndividualService';
+import { CompanyService } from '../CompanyService';
 
-function createIndividualMutationResolver(
+function createCompanyMutationResolver(
     mutationType: string,
     tokenService: TokenService,
-    individualService: IndividualService,
+    companyService: CompanyService,
   ) {
   return async (source, args) => {
-    const email = await tokenService.readTokenEmail(args.token, 'individuals');
-    const client = await individualService.db.getClient();
+    const email = await tokenService.readTokenEmail(args.token, 'companies');
+    const client = await companyService.db.getClient();
     if (email) {
       let query;
       try {
         await client.query('BEGIN');
         query = await client.query(
-          await individualService.setIndividual(mutationType, args.setParams, args.whereParams),
+          await companyService.setIndividual(mutationType, args.setParams, args.whereParams),
         );
         query = query.rows[0] || '';
         return { code:200, row: query };
@@ -31,5 +31,5 @@ function createIndividualMutationResolver(
 }
 
 export {
-  createIndividualMutationResolver,
+  createCompanyMutationResolver,
 };

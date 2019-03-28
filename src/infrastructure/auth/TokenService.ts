@@ -5,28 +5,29 @@ import { encode, verify } from './Hasher';
 const secret = '9f3be5394b64d14fe1a1915a37723949';
 
 export class TokenService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService) { }
 
-  async readTokenEmail(token: string): Promise<string> {
+  async readTokenEmail(token: string, type: string): Promise<string> {
     try {
       const email = jwtSimple.decode(token, secret);
-      return await this.userExists(email) ? email : null;
-    }
-    catch {
+      return await this.userExists(email, type) ? email : null;
+    } catch {
       return null;
     }
   }
 
-  async createToken(email: string, password: string): Promise<string | null> {
-    return (await this.userExists(email) && await this.verifyPassword(email, password)) ? jwtSimple.encode(email, secret) : null;
+  async createToken(email: string, password: string, type: string): Promise<string | null> {
+    return (
+      await this.userExists(email, type)
+      && await this.verifyPassword(email, password, type)) ? jwtSimple.encode(email, secret) : null;
   }
 
-  private async userExists(email: string): Promise<boolean> {
-    return await this.countActiveUsers(email) > 0;
+  private async userExists(email: string, type: string): Promise<boolean> {
+    return await this.countActiveUsers(email, type) > 0;
   }
 
-  private async verifyPassword(email: string, password: string): Promise<boolean> {
-    const existingPassword = await this.retrievePassword(email);
+  private async verifyPassword(email: string, password: string, type: string): Promise<boolean> {
+    const existingPassword = await this.retrievePassword(email, type);
     const parts = existingPassword.split('$');
     const iterations = parseInt(parts[1]);
     const salt = parts[2];
@@ -35,13 +36,15 @@ export class TokenService {
     return hashedPassword === existingPassword;
   }
 
-  private async countActiveUsers(email: string): Promise<number> {
-    const result = await this.db.query('SELECT count(1) as count FROM users WHERE email = $1 AND is_active = $2', [email, 't']);
+  private async countActiveUsers(email: string, type: string): Promise<number> {
+    const result = await this.db.query(
+      `SELECT count(1) as count FROM ${type} WHERE email = $1 AND is_active = $2`, [email, 't']);
     return result['rows'][0]['count'];
   }
 
-  private async retrievePassword(email: string): Promise<string> {
-    const result = await this.db.query('SELECT password as password FROM users WHERE email = $1 AND is_active = $2', [email, 't']);
+  private async retrievePassword(email: string, type: string): Promise<string> {
+    const result = await this.db.query(
+      `SELECT password as password FROM ${type} WHERE email = $1 AND is_active = $2`, [email, 't']);
     return result['rows'][0]['password'];
   }
 }

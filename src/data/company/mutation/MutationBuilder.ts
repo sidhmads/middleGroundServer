@@ -8,20 +8,19 @@ export class MutationBuilder {
     id: this.mutateId,
     email: this.mutateEmail,
     password: this.mutatePassword,
-    first_name: this.mutateFirstName,
-    last_name: this.mutateLastName,
+    name: this.mutateName,
     description: this.mutateDescription,
     img: this.mutateImg,
-    remaining_amount: this.mutateRemainingAmount,
     total_amount: this.mutateTotalAmount,
+    current_amount: this.mutateCurrentAmount,
     is_active: this.mutateIsActive,
   };
   constructor(mutationType:string, setParams, whereParams) {
     const squelPostgres = squel.useFlavour('postgres');
     const mutationMap = {
-      update: squelPostgres.update(Config.pgSqlOptions).table('individuals'),
-      insert: squelPostgres.insert(Config.pgSqlOptions).into('individuals'),
-      delete: squelPostgres.delete(Config.pgSqlOptions).from('individuals'),
+      update: squelPostgres.update(Config.pgSqlOptions).table('companies'),
+      insert: squelPostgres.insert(Config.pgSqlOptions).into('companies'),
+      delete: squelPostgres.delete(Config.pgSqlOptions).from('companies'),
     };
     this.sql = mutationMap[mutationType];
     if (mutationType !== 'insert') {
@@ -60,30 +59,17 @@ export class MutationBuilder {
     return this;
   }
 
-  private mutateFirstName(field, value) {
+  private mutateName(field, value) {
     switch (field){
       case 'set':
-        this.sql.set('first_name', value);
+        this.sql.set('name', value);
         break;
       case 'where':
-        this.sql.where('first_name=?', value);
+        this.sql.where('name=?', value);
         break;
     }
     return this;
   }
-
-  private mutateLastName(field, value) {
-    switch (field){
-      case 'set':
-        this.sql.set('last_name', value);
-        break;
-      case 'where':
-        this.sql.where('last_name=?', value);
-        break;
-    }
-    return this;
-  }
-
 
   private mutateDescription(field, value) {
     switch (field){
@@ -109,13 +95,13 @@ export class MutationBuilder {
     return this;
   }
 
-  private mutateRemainingAmount(field, value) {
+  private mutateCurrentAmount(field, value) {
     switch (field){
       case 'set':
-        this.sql.set('remaining_amount', value);
+        this.sql.set('current_amount', value);
         break;
       case 'where':
-        this.sql.where('remaining_amount=?', value);
+        this.sql.where('current_amount=?', value);
         break;
     }
     return this;

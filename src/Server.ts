@@ -1,5 +1,6 @@
 import { TokenService } from './infrastructure/auth/TokenService';
 import { IndividualService } from './data/individual';
+import { CompanyService } from './data/company';
 import { DbService } from './infrastructure/db';
 import { ApolloServer } from 'apollo-server';
 import { default as createSchema } from './infrastructure/schema/schema';
@@ -8,6 +9,7 @@ import { GraphQLSchema, graphql } from 'graphql';
 interface ServiceConfig {
   tokenService: TokenService;
   individualService: IndividualService;
+  companyService: CompanyService;
 }
 
 export default class Server {
@@ -17,9 +19,11 @@ export default class Server {
     const dbService = new DbService;
     const tokenService = new TokenService(dbService);
     const individualService = new IndividualService(dbService);
+    const companyService = new CompanyService(dbService);
     const schema = createSchema(
       tokenService,
-      individualService
+      individualService,
+      companyService,
     );
     this.schema = schema;
     this.server = new ApolloServer({ schema, cors: true });

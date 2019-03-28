@@ -16,6 +16,13 @@ import {
   IndividualType,
   createIndividualMutationResolver,
 } from '../../data/individual';
+import {
+  CompanyService,
+  SetCompanyType,
+  WhereCompanyType,
+  CompanyType,
+  createCompanyMutationResolver,
+} from '../../data/company';
 
 
 function insertMutation(tableType: string) {
@@ -70,6 +77,7 @@ function deleteMutation(tableType: string) {
 function returnObject(tableType: string) {
   const returnMap = {
     Individual: IndividualType,
+    Company: CompanyType,
   };
   const returnObject = returnMap[tableType];
 
@@ -80,11 +88,10 @@ function paramObject(mutationType: string, tableType: string) {
   const paramMap = {
     setIndividual: SetIndividualType,
     whereIndividual: WhereIndividualType,
+    setCompany: SetCompanyType,
+    whereCompany: WhereCompanyType,
   };
 
-  const returnMap = {
-    returnIndividual: IndividualType,
-  };
   const paramObject = paramMap[mutationType + tableType];
 
   return paramObject;
@@ -97,18 +104,25 @@ const Mutation = new GraphQLObjectType({
     insertIndividual: insertMutation('Individual'),
     updateIndividual: updateMutation('Individual'),
     deleteIndividual: deleteMutation('Individual'),
+    insertCompany: insertMutation('Company'),
+    updateCompany: updateMutation('Company'),
+    deleteCompany: deleteMutation('Company'),
   },
 });
 
 function createMutationResolver(
   tokenService: TokenService,
   individualService: IndividualService,
+  companyService: CompanyService,
 ) {
   return {
     createToken: createTokenResolver(tokenService),
     insertIndividual: createIndividualMutationResolver('insert', tokenService, individualService),
     updateIndividual: createIndividualMutationResolver('update', tokenService, individualService),
     deleteIndividual: createIndividualMutationResolver('delete', tokenService, individualService),
+    insertCompany: createCompanyMutationResolver('insert', tokenService, companyService),
+    updateCompany: createCompanyMutationResolver('update', tokenService, companyService),
+    deleteCompany: createCompanyMutationResolver('delete', tokenService, companyService),
   };
 }
 
