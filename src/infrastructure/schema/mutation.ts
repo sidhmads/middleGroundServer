@@ -23,13 +23,6 @@ import {
   CompanyType,
   createCompanyMutationResolver,
 } from '../../data/company';
-import {
-  CharityService,
-  SetCharityType,
-  WhereCharityType,
-  CharityType,
-  createCharityMutationResolver,
-} from '../../data/charity';
 
 
 function insertMutation(tableType: string) {
@@ -85,7 +78,6 @@ function returnObject(tableType: string) {
   const returnMap = {
     Individual: IndividualType,
     Company: CompanyType,
-    Charity: CharityType,
   };
   const returnObject = returnMap[tableType];
 
@@ -98,8 +90,6 @@ function paramObject(mutationType: string, tableType: string) {
     whereIndividual: WhereIndividualType,
     setCompany: SetCompanyType,
     whereCompany: WhereCompanyType,
-    setCharity: SetCharityType,
-    whereCharity: WhereCharityType,
   };
 
   const paramObject = paramMap[mutationType + tableType];
@@ -117,9 +107,6 @@ const Mutation = new GraphQLObjectType({
     insertCompany: insertMutation('Company'),
     updateCompany: updateMutation('Company'),
     deleteCompany: deleteMutation('Company'),
-    insertCharity: insertMutation('Charity'),
-    updateCharity: updateMutation('Charity'),
-    deleteCharity: deleteMutation('Charity'),
   },
 });
 
@@ -127,7 +114,6 @@ function createMutationResolver(
   tokenService: TokenService,
   individualService: IndividualService,
   companyService: CompanyService,
-  charityService: CharityService,
 ) {
   return {
     createToken: createTokenResolver(tokenService),
@@ -137,9 +123,6 @@ function createMutationResolver(
     insertCompany: createCompanyMutationResolver('insert', tokenService, companyService),
     updateCompany: createCompanyMutationResolver('update', tokenService, companyService),
     deleteCompany: createCompanyMutationResolver('delete', tokenService, companyService),
-    insertCharity: createCharityMutationResolver('insert', tokenService, charityService),
-    updateCharity: createCharityMutationResolver('update', tokenService, charityService),
-    deleteCharity: createCharityMutationResolver('delete', tokenService, charityService),
   };
 }
 
