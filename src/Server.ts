@@ -2,6 +2,8 @@ import { TokenService } from './infrastructure/auth/TokenService';
 import { IndividualService } from './data/individual';
 import { CompanyService } from './data/company';
 import { CharityService } from './data/charity';
+import { PostService } from './data/post';
+import { CommentService } from './data/comment';
 import { DbService } from './infrastructure/db';
 import { ApolloServer } from 'apollo-server';
 import { default as createSchema } from './infrastructure/schema/schema';
@@ -12,6 +14,8 @@ interface ServiceConfig {
   individualService: IndividualService;
   companyService: CompanyService;
   charityService: CharityService;
+  postService: PostService;
+  commentService: CommentService;
 }
 
 export default class Server {
@@ -23,11 +27,15 @@ export default class Server {
     const individualService = new IndividualService(dbService);
     const companyService = new CompanyService(dbService);
     const charityService = new CharityService(dbService);
+    const postService = new PostService(dbService);
+    const commentService = new CommentService(dbService);
     const schema = createSchema(
       tokenService,
       individualService,
       companyService,
       charityService,
+      postService,
+      commentService,
     );
     this.schema = schema;
     this.server = new ApolloServer({ schema, cors: true });
