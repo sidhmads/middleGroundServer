@@ -7,7 +7,8 @@ import { IndividualService, createIndividualTypeResolver } from '../../data/indi
 import { CompanyService, createCompanyTypeResolver } from '../../data/company';
 import { CharityService, createCharityTypeResolver } from '../../data/charity';
 import { PostService, createPostTypeResolver } from '../../data/post';
-import { CommentService } from '../../data/comment';
+import { CommentService, createCommentTypeResolver } from '../../data/comment';
+import { LikeService } from '../../data/like';
 
 function createSchema(
     tokenService: TokenService,
@@ -16,6 +17,7 @@ function createSchema(
     charityService: CharityService,
     postService: PostService,
     commentService: CommentService,
+    likeService: LikeService,
 ) {
   const schema = new GraphQLSchema({
     query: createQueryType(),
@@ -27,11 +29,12 @@ function createSchema(
     resolvers: {
       Query: createQueryResolver(tokenService, individualService, companyService, charityService),
       Mutation: createMutationResolver(
-        tokenService, individualService, companyService, charityService, postService, commentService),
+        tokenService, individualService, companyService, charityService, postService, commentService, likeService),
       Individual: createIndividualTypeResolver(postService, commentService),
       Company: createCompanyTypeResolver(postService, commentService),
       Charity: createCharityTypeResolver(postService, commentService),
-      Post: createPostTypeResolver(commentService),
+      Post: createPostTypeResolver(commentService, likeService),
+      Comment: createCommentTypeResolver(likeService),
     },
   });
   return schema;

@@ -16,7 +16,7 @@ export class TokenService {
     }
   }
 
-  async createToken(email: string, password: string, type: string): Promise<string | null> {
+  async generateToken(email: string, password: string, type: string): Promise<string | null> {
     return (
       await this.userExists(email, type)
       && await this.verifyPassword(email, password, type)) ? jwtSimple.encode(email, secret) : null;

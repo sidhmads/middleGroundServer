@@ -6,18 +6,18 @@ export class CommentService {
   constructor(public db: DbService) {}
 
   async getComments(ids: number[], commentType: string) {
-    const posts = await this.db.query(this.getBaseQuery().whereIds(ids, commentType).toString(), []);
-    return posts['rows'];
+    const comments = await this.db.query(this.getBaseQuery().whereIds(ids, commentType).toString(), []);
+    return comments['rows'];
   }
 
   async getAllRelatedComments(id: number, commentType: string) {
-    const posts = await this.db.query(this.getBaseQuery().whereParentId(id, commentType).toString(), []);
-    return posts['rows'];
+    const comments = await this.db.query(this.getBaseQuery().whereParent(id, commentType).toString(), []);
+    return comments['rows'];
   }
 
   async getAllUserComments(id: number, userType: string, commentType: string) {
-    const posts = await this.db.query(this.getBaseQuery().whereUserId(id, userType, commentType).toString(), []);
-    return posts['rows'];
+    const comments = await this.db.query(this.getBaseQuery().whereUser(id, userType, commentType).toString(), []);
+    return comments['rows'];
   }
 
   async setComment(mutationType, setParams, whereParams) {
