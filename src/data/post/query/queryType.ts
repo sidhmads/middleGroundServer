@@ -1,22 +1,21 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLBoolean, GraphQLFloat, GraphQLList } from 'graphql';
-import { PostType } from '../../post/';
-import { CommentType } from '../../comment/';
+import { CommentType } from '../../comment';
 import { GraphQLDate } from 'graphql-iso-date';
 
-const CharityType = new GraphQLObjectType({
-  name: 'Charity',
+const PostType = new GraphQLObjectType({
+  name: 'Post',
   fields: {
     id: { type: GraphQLInt },
-    name: { type: GraphQLString },
-    email: { type: GraphQLString },
+    user_id: { type: GraphQLInt },
+    user_type: { type: GraphQLString },
     description: { type: GraphQLString },
-    img: { type: GraphQLString },
-    total_amount: { type: GraphQLFloat },
+    sponsor_id: { type: GraphQLInt },
+    sponsor_type: { type: GraphQLString },
+    sponsor_amount: { type: GraphQLFloat },
     is_active: { type: GraphQLBoolean },
-    last_login: { type: GraphQLDate },
-    post: {
-      type: new GraphQLList(PostType),
-    },
+    end_date: { type: GraphQLDate },
+    created: { type: GraphQLDate },
+    updated: { type: GraphQLDate },
     all_comments: {
       type: new GraphQLList(CommentType),
     },
@@ -30,5 +29,5 @@ const CharityType = new GraphQLObjectType({
 });
 
 export {
-  CharityType,
+  PostType,
 };

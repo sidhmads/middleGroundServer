@@ -5,19 +5,7 @@ import {
   GraphQLEnumType,
 } from 'graphql';
 import { TokenService } from './TokenService';
-
-const userType = new GraphQLEnumType({name: 'userType',
-  values: {
-    individual: {
-      value: 'individuals',
-    },
-    company: {
-      value: 'companies',
-    },
-    charity: {
-      value: 'charities',
-    },
-  } });
+import { userType } from '../../data/Enum';
 
 const TokenType = new GraphQLObjectType({
   name: 'Token',

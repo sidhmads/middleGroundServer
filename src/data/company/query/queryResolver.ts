@@ -5,6 +5,8 @@ import {
 import { CompanyService } from '../CompanyService';
 import { CompanyType } from './';
 import { TokenService } from '../../../infrastructure/auth';
+import { PostService } from '../../post';
+import { CommentService } from '../../comment';
 
 const companyQuery: GraphQLFieldConfig<any, any> = {
   type: CompanyType,
@@ -20,7 +22,25 @@ function createCompanyQueryResolver(companyService: CompanyService, tokenService
   };
 }
 
+function createCompanyTypeResolver(postService: PostService, commentService: CommentService) {
+  return {
+    post: (company) => {
+      return postService.getAllPosts(company.id, 'company');
+    },
+    all_comments: (company) => {
+      return commentService.getAllUserComments(company.id, 'companies', '');
+    },
+    pro_comments: (company) => {
+      return commentService.getAllUserComments(company.id, 'companies', 'pro');
+    },
+    con_comments: (company) => {
+      return commentService.getAllUserComments(company.id, 'companies', 'con');
+    },
+  };
+}
+
 export {
   companyQuery,
   createCompanyQueryResolver,
+  createCompanyTypeResolver,
 };

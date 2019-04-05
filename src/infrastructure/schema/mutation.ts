@@ -1,13 +1,9 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLFieldConfig,
-  GraphQLList,
   GraphQLInt,
-  GraphQLInputObjectType,
-  GraphQLEnumType,
-  GraphQLNonNull,
 } from 'graphql';
+import { userType } from '../../data/Enum';
 import { createToken, createTokenResolver, TokenService } from '../auth';
 import {
   IndividualService,
@@ -30,6 +26,20 @@ import {
   CharityType,
   createCharityMutationResolver,
 } from '../../data/charity';
+import {
+  PostService,
+  SetPostType,
+  WherePostType,
+  PostType,
+  createPostMutationResolver,
+} from '../../data/post';
+import {
+  CommentService,
+  SetCommentType,
+  WhereCommentType,
+  CommentType,
+  createCommentMutationResolver,
+} from '../../data/comment';
 
 
 function insertMutation(tableType: string) {
@@ -43,6 +53,7 @@ function insertMutation(tableType: string) {
     }),
     args: {
       token: { type: GraphQLString },
+      type: { type: userType },
       setParams: { type: paramObject('set', tableType) },
     },
   };
@@ -59,6 +70,7 @@ function updateMutation(tableType: string) {
     }),
     args: {
       token: { type: GraphQLString },
+      type: { type: userType },
       setParams: { type: paramObject('set', tableType) },
       whereParams: { type: paramObject('where', tableType) },
     },
@@ -76,6 +88,7 @@ function deleteMutation(tableType: string) {
     }),
     args: {
       token: { type: GraphQLString },
+      type: { type: userType },
       whereParams: { type: paramObject('where', tableType) },
     },
   };
@@ -86,6 +99,8 @@ function returnObject(tableType: string) {
     Individual: IndividualType,
     Company: CompanyType,
     Charity: CharityType,
+    Post: PostType,
+    Comment: CommentType,
   };
   const returnObject = returnMap[tableType];
 
@@ -100,6 +115,10 @@ function paramObject(mutationType: string, tableType: string) {
     whereCompany: WhereCompanyType,
     setCharity: SetCharityType,
     whereCharity: WhereCharityType,
+    setPost: SetPostType,
+    wherePost: WherePostType,
+    setComment: SetCommentType,
+    whereComment: WhereCommentType,
   };
 
   const paramObject = paramMap[mutationType + tableType];
@@ -120,6 +139,12 @@ const Mutation = new GraphQLObjectType({
     insertCharity: insertMutation('Charity'),
     updateCharity: updateMutation('Charity'),
     deleteCharity: deleteMutation('Charity'),
+    insertPost: insertMutation('Post'),
+    updatePost: updateMutation('Post'),
+    deletePost: deleteMutation('Post'),
+    insertComment: insertMutation('Comment'),
+    updateComment: updateMutation('Comment'),
+    deleteComment: deleteMutation('Comment'),
   },
 });
 
@@ -128,6 +153,8 @@ function createMutationResolver(
   individualService: IndividualService,
   companyService: CompanyService,
   charityService: CharityService,
+  postService: PostService,
+  commentService: CommentService,
 ) {
   return {
     createToken: createTokenResolver(tokenService),
@@ -140,6 +167,12 @@ function createMutationResolver(
     insertCharity: createCharityMutationResolver('insert', tokenService, charityService),
     updateCharity: createCharityMutationResolver('update', tokenService, charityService),
     deleteCharity: createCharityMutationResolver('delete', tokenService, charityService),
+    insertPost: createPostMutationResolver('insert', tokenService, postService),
+    updatePost: createPostMutationResolver('update', tokenService, postService),
+    deletePost: createPostMutationResolver('delete', tokenService, postService),
+    insertComment: createCommentMutationResolver('insert', tokenService, commentService),
+    updateComment: createCommentMutationResolver('update', tokenService, commentService),
+    deleteComment: createCommentMutationResolver('delete', tokenService, commentService),
   };
 }
 
