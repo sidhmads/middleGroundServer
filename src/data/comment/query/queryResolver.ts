@@ -1,9 +1,9 @@
-import { CommentService } from '../../comment';
+import { LikeService } from '../../like/LikeService';
 
-function createCommentTypeResolver(commentService: CommentService) {
+function createCommentTypeResolver(likeService: LikeService) {
   return {
-    comment: (comment, commentType) => {
-      return commentService.getAllRelatedComments(comment.id, commentType);
+    likes: (comment) => {
+      return likeService.getAllRelatedLikes(comment.id, 'comments');
     },
   };
 }

@@ -4,7 +4,7 @@ import {
   GraphQLInt,
 } from 'graphql';
 import { userType } from '../../data/Enum';
-import { createToken, createTokenResolver, TokenService } from '../auth';
+import { generateToken, generateTokenResolver, TokenService } from '../auth';
 import {
   IndividualService,
   SetIndividualType,
@@ -40,12 +40,18 @@ import {
   CommentType,
   createCommentMutationResolver,
 } from '../../data/comment';
+import {
+  LikeService,
+  SetLikeType,
+  WhereLikeType,
+  LikeType,
+  createLikeMutationResolver,
+} from '../../data/like';
 
-
-function insertMutation(tableType: string) {
+function createMutation(tableType: string) {
   return {
     type: new GraphQLObjectType({
-      name: `insert${tableType}`,
+      name: `create${tableType}`,
       fields: {
         code: { type: GraphQLInt },
         row: { type: returnObject(tableType) },
@@ -101,6 +107,7 @@ function returnObject(tableType: string) {
     Charity: CharityType,
     Post: PostType,
     Comment: CommentType,
+    Like: LikeType,
   };
   const returnObject = returnMap[tableType];
 
@@ -119,6 +126,8 @@ function paramObject(mutationType: string, tableType: string) {
     wherePost: WherePostType,
     setComment: SetCommentType,
     whereComment: WhereCommentType,
+    setLike: SetLikeType,
+    whereLike: WhereLikeType,
   };
 
   const paramObject = paramMap[mutationType + tableType];
@@ -129,22 +138,25 @@ function paramObject(mutationType: string, tableType: string) {
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    createToken,
-    insertIndividual: insertMutation('Individual'),
+    generateToken,
+    createIndividual: createMutation('Individual'),
     updateIndividual: updateMutation('Individual'),
     deleteIndividual: deleteMutation('Individual'),
-    insertCompany: insertMutation('Company'),
+    createCompany: createMutation('Company'),
     updateCompany: updateMutation('Company'),
     deleteCompany: deleteMutation('Company'),
-    insertCharity: insertMutation('Charity'),
+    createCharity: createMutation('Charity'),
     updateCharity: updateMutation('Charity'),
     deleteCharity: deleteMutation('Charity'),
-    insertPost: insertMutation('Post'),
+    createPost: createMutation('Post'),
     updatePost: updateMutation('Post'),
     deletePost: deleteMutation('Post'),
-    insertComment: insertMutation('Comment'),
+    createComment: createMutation('Comment'),
     updateComment: updateMutation('Comment'),
     deleteComment: deleteMutation('Comment'),
+    createLike: createMutation('Like'),
+    updateLike: updateMutation('Like'),
+    deleteLike: deleteMutation('Like'),
   },
 });
 
@@ -155,24 +167,28 @@ function createMutationResolver(
   charityService: CharityService,
   postService: PostService,
   commentService: CommentService,
+  likeService: LikeService,
 ) {
   return {
-    createToken: createTokenResolver(tokenService),
-    insertIndividual: createIndividualMutationResolver('insert', tokenService, individualService),
+    generateToken: generateTokenResolver(tokenService),
+    createIndividual: createIndividualMutationResolver('insert', tokenService, individualService),
     updateIndividual: createIndividualMutationResolver('update', tokenService, individualService),
     deleteIndividual: createIndividualMutationResolver('delete', tokenService, individualService),
-    insertCompany: createCompanyMutationResolver('insert', tokenService, companyService),
+    createCompany: createCompanyMutationResolver('insert', tokenService, companyService),
     updateCompany: createCompanyMutationResolver('update', tokenService, companyService),
     deleteCompany: createCompanyMutationResolver('delete', tokenService, companyService),
-    insertCharity: createCharityMutationResolver('insert', tokenService, charityService),
+    createCharity: createCharityMutationResolver('insert', tokenService, charityService),
     updateCharity: createCharityMutationResolver('update', tokenService, charityService),
     deleteCharity: createCharityMutationResolver('delete', tokenService, charityService),
-    insertPost: createPostMutationResolver('insert', tokenService, postService),
+    createPost: createPostMutationResolver('insert', tokenService, postService),
     updatePost: createPostMutationResolver('update', tokenService, postService),
     deletePost: createPostMutationResolver('delete', tokenService, postService),
-    insertComment: createCommentMutationResolver('insert', tokenService, commentService),
+    createComment: createCommentMutationResolver('insert', tokenService, commentService),
     updateComment: createCommentMutationResolver('update', tokenService, commentService),
     deleteComment: createCommentMutationResolver('delete', tokenService, commentService),
+    createLike: createLikeMutationResolver('insert', tokenService, likeService),
+    updateLike: createLikeMutationResolver('update', tokenService, likeService),
+    deleteLike: createLikeMutationResolver('delete', tokenService, likeService),
   };
 }
 

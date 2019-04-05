@@ -1,6 +1,7 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLBoolean, GraphQLFloat, GraphQLList } from 'graphql';
 import { CommentType } from '../../comment';
 import { GraphQLDate } from 'graphql-iso-date';
+import { LikeType } from '../../like';
 
 const PostType = new GraphQLObjectType({
   name: 'Post',
@@ -24,6 +25,9 @@ const PostType = new GraphQLObjectType({
     },
     con_comments: {
       type: new GraphQLList(CommentType),
+    },
+    likes: {
+      type: new GraphQLList(LikeType),
     },
   },
 });
