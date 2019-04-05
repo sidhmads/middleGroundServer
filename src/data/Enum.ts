@@ -15,6 +15,18 @@ const userType = new GraphQLEnumType({
   },
 });
 
+const postOrCommentType = new GraphQLEnumType({
+  name: 'postOrCommentType',
+  values: {
+    post: {
+      value: 'posts',
+    },
+    comment: {
+      value: 'comments',
+    },
+  },
+});
+
 const commentType = new GraphQLEnumType({
   name: 'commentType',
   values: {
@@ -27,4 +39,4 @@ const commentType = new GraphQLEnumType({
   },
 });
 
-export { userType, commentType };
+export { userType, postOrCommentType, commentType };

@@ -11,7 +11,7 @@ export class PostService {
   }
 
   async getAllPosts(id: number, type: string) {
-    const posts = await this.db.query(this.getBaseQuery().whereUserId(id, type).toString(), []);
+    const posts = await this.db.query(this.getBaseQuery().whereUser(id, type).toString(), []);
     return posts['rows'];
   }
 

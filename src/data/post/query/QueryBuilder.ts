@@ -64,16 +64,16 @@ export class QueryBuilder {
 
   whereIds(ids: number[]) {
     if (ids.length) {
-      this.sql.where(`post.user_id IN (${ids.join(', ')})`);
+      this.sql.where(`user_id IN (${ids.join(', ')})`);
     } else {
       this.sql.where('false');
     }
     return this;
   }
 
-  whereUserId(id: number, type: string) {
+  whereUser(id: number, type: string) {
     if (id) {
-      this.sql.where(`post.user_id IN (${id})`).where(`user_type = '${type}'`);
+      this.sql.where(`user_id IN (${id})`).where(`user_type = '${type}'`);
     } else {
       this.sql.where('false');
     }

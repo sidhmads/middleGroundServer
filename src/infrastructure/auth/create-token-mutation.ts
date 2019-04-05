@@ -15,7 +15,7 @@ const TokenType = new GraphQLObjectType({
   },
 });
 
-const createToken: GraphQLFieldConfig<any, any> = {
+const generateToken: GraphQLFieldConfig<any, any> = {
   type: TokenType,
   args: {
     email: { type: GraphQLString },
@@ -24,9 +24,9 @@ const createToken: GraphQLFieldConfig<any, any> = {
   },
 };
 
-function createTokenResolver(tokenService: TokenService) {
+function generateTokenResolver(tokenService: TokenService) {
   return async (source, args) => {
-    const token = await tokenService.createToken(args.email, args.password, args.type);
+    const token = await tokenService.generateToken(args.email, args.password, args.type);
     return {
       token,
       error: token === null ? 'Could not create token' : null,
@@ -35,6 +35,5 @@ function createTokenResolver(tokenService: TokenService) {
 }
 
 export {
-  createToken,
-  createTokenResolver,
-};
+  generateToken,
+  generateTokenResolver};

@@ -1,27 +1,21 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLBoolean, GraphQLList, GraphQLFloat } from 'graphql';
-import { userType, commentType } from '../../Enum';
+import { userType, postOrCommentType } from '../../Enum';
 import { GraphQLDate } from 'graphql-iso-date';
-import { LikeType } from '../../like';
 
-const CommentType = new GraphQLObjectType({
-  name: 'Comment',
+const LikeType = new GraphQLObjectType({
+  name: 'Like',
   fields: {
     id: { type: GraphQLInt },
     user_id: { type: GraphQLInt },
     user_type: { type: userType },
-    description: { type: GraphQLString },
-    post_id: { type: GraphQLInt },
-    comment_type: { type: commentType },
-    sentiment: { type: GraphQLFloat },
+    post_comment_id: { type: GraphQLInt },
+    post_comment_type: { type: postOrCommentType },
     is_active: { type: GraphQLBoolean },
     created: { type: GraphQLDate },
     updated: { type: GraphQLDate },
-    likes: {
-      type: new GraphQLList(LikeType),
-    },
   },
 });
 
 export {
-  CommentType,
+  LikeType,
 };

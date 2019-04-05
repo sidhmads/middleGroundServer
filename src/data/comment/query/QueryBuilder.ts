@@ -61,13 +61,13 @@ export class QueryBuilder {
 
   whereCommentType(commentType: string) {
     if (['pro', 'con'].includes(commentType)) {
-      this.sql.where(`comment.comment_type = '${commentType}'`);
+      this.sql.where(`comment_type = '${commentType}'`);
     }
   }
 
   whereIds(ids: number[], commentType: string) {
     if (ids.length) {
-      this.sql.where(`comment.user_id IN (${ids.join(', ')})`);
+      this.sql.where(`user_id IN (${ids.join(', ')})`);
       this.whereCommentType(commentType);
     } else {
       this.sql.where('false');
@@ -75,10 +75,10 @@ export class QueryBuilder {
     return this;
   }
 
-  whereUserId(id: number, userType: string, commentType: string) {
+  whereUser(id: number, userType: string, commentType: string) {
     if (id) {
       this.sql
-        .where(`comment.user_id IN (${id})`)
+        .where(`user_id IN (${id})`)
         .where(`user_type = '${userType}'`);
       this.whereCommentType(commentType);
     } else {
@@ -87,10 +87,10 @@ export class QueryBuilder {
     return this;
   }
 
-  whereParentId(id: number, commentType: string) {
+  whereParent(id: number, commentType: string) {
     if (id) {
       this.sql
-        .where(`comment.post_id IN (${id})`);
+        .where(`post_id IN (${id})`);
       this.whereCommentType(commentType);
     } else {
       this.sql.where('false');
